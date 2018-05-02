@@ -1,0 +1,69 @@
+<%- include layouts/header.ejs %>
+<div id="mySidenav" class="sidenav" style="width: 16%;" >
+    <img  src="../images/bank-logo-light.png" style="padding-left:10%;padding-bottom: 5%;padding-top:10%;" >
+    <a  class="navBar" href="/allblocks" style="padding-left:10%;">Blocks</a>
+    <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
+    <a  class="navBar" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
+    <a  class="navBar" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
+    <a  class="active" href="/users" style="padding-left:10%;" > Users</a>
+    <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
+</div>
+
+<div class="page-data">
+
+    <div id="wrapper2" class="data-table-mini" style="padding-top:2%">
+        <label style="font-size: 24px;padding-top:15%;padding-bottom:4%;"><b>User ID # <%= data[0].zaddress %></b></label>
+        <table cellpadding="12">
+<tr><td>
+        <div style="font-size: 24px;padding-top:2%;padding-bottom:1%;">
+            <label><b>Info</b></label>
+        </div>
+    </td>
+<td align="right">
+    <% if(data[0].active==true){%>
+    <a class="a-inside edit"  style=" border-radius: 25px;" href="/user_inactive/<%=data[0].zaddress%>">Deactivate</a>
+    <%}%>
+    <% if(data[0].active==false){%>
+    <a class="a-inside edit" style=" border-radius: 25px;" href="/user_active/<%=data[0].zaddress%>">Activate</a>
+    <%}%>
+</td></tr>
+        </table>
+
+        <table cellpadding="12">
+            <tr>
+                <td class="label" valign="top">Bank</td>
+                <td align="right"><%= data[0].bank %></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">Account</td>
+                <td align="right"><%= data[0].account %></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">Account verified</td>
+                <td align="right"><%= data[0].verified %></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">Active</td>
+                <td align="right"><%= data[0].active %>
+
+
+
+                </td>
+            </tr>
+        <!--    <tr>
+                <% if(data[0].active==true){%>
+                <a class="a-inside edit" href="/user_inactive/<%=data[0].zaddress%>">Inactive</a>
+                <%}%>
+                <% if(data[0].active==false){%>
+                <a class="a-inside edit" href="/user_active/<%=data[0].zaddress%>">Active</a>
+                <%}%>
+
+            </tr>-->
+
+        </table>
+    </div>
+
+</div>
+
+
+<%- include layouts/footer.ejs %>

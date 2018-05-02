@@ -1,0 +1,102 @@
+
+
+<%- include layouts/header.ejs %>
+
+<div id="mySidenav" class="sidenav" style="width: 16%;" >
+    <img  src="../images/bank-logo-light.png" style="padding-left:10%;padding-bottom: 5%;padding-top:10%;" >
+    <a  class="navBar" href="/allblocks" style="padding-left:10%;">Blocks</a>
+    <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
+    <a  class="navBar" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
+    <a  class="navBar" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
+    <a  class="active" href="/users" style="padding-left:10%;" > Users</a>
+    <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
+</div>
+<style>
+    div#status{position:fixed; font-size:24px;}
+    div#wrap{width:800px; margin:0px auto;}
+/*    div.newData{height:1000px; background:#09F; margin:10px 0px;}*/
+    div.newData{}
+</style>
+<script>
+
+    $(window).scroll(function() {
+       //yHandler();
+    });
+
+
+    function yHandler(){
+
+        var wrap = document.getElementById('wrap');
+        var contentHeight = wrap.offsetHeight;
+        var yOffset = window.pageYOffset;
+        var y = yOffset + window.innerHeight;
+        if(y >= contentHeight){
+            // Ajax call to get more dynamic data goes here
+
+
+         $.getJSON('/users_next/' + $("#usersrows tr:last>td:first").text(), function(data){
+             data.filter(function (data, i){
+                   var url = '/users_one/'
+                 $("#usersrows").append("<tr class='clickable-row' data-href='"+url+data.zaddress+"' ><td><a href="+url+data.zaddress+" > " +  data.zaddress + "</a></td> <td>" + data.bank + "</td> <td>" + data.account + "</td> " + "<td>" + data.verified + "</td> <td>" + data.active + "</td> </tr>");
+             });
+         })
+        }
+    }
+    //window.onscroll = yHandler;
+
+</script>
+
+<div class="page-data" id="datatable" >
+
+
+    <div style="padding-left:20%;padding-bottom: 3%;padding-top: 2%;width: 100%;">
+        <form method="post" action="/users_search">
+        <input type="text" placeholder="    Search by User zaddress.." name="id" style="width: 71%; border-radius: 25px;" >
+       <button type="submit" class="a-inside edit" style=" border-radius: 25px;">Search</button>
+        </form>
+    </div>
+
+    <div class="data-table">
+             <table cellspacing="0" cellpadding="0">
+           <!-- <lable ><b> Block List</b></lable>-->
+
+            <tr >
+                <th>Zaddress</th>
+                <th>Bank</th>
+                <th>Account</th>
+                <th>Verified</th>
+                <th>Active</th>
+            </tr>
+
+                 <tbody id="usersrows">
+            <% if(data.length){
+
+            for(var i = 0;i < data.length;i++) { %>
+
+            <tr class=''>
+                <td><a href='/users_one/<%= data[i].zaddress %>'><%=data[i].zaddress%></a></td>
+                <td><%= data[i].bank %></td>
+                <td><%= data[i].account %></td>
+                <td><%= data[i].verified %></td>
+                <td><%= data[i].active %></td>
+            </tr>
+
+            <% }
+
+            }else{ %>
+            <tr>
+                <td colspan="6">No data available</td>
+            </tr>
+            <% } %>
+                 </tbody>
+
+        </table>
+
+    </div>
+    <div id="status"></div>
+    <div id="wrap">
+</div>
+
+
+
+<%- include layouts/footer.ejs %>

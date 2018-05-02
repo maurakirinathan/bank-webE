@@ -1,0 +1,58 @@
+<%- include layouts/header.ejs %>
+
+<div id="mySidenav" class="sidenav" style="width: 16%;" >
+    <img  src="../images/bank-logo-light.png" style="padding-left:10%;padding-bottom: 5%;padding-top:10%;" >
+    <a  class="navBar" href="/allblocks" style="padding-left:10%;">Blocks</a>
+    <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
+    <a  class="active" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
+    <a  class="navBar" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
+    <a  class="navBar" href="/users" style="padding-left:10%;" > Users</a>
+    <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
+</div>
+
+<div class="page-data" id="datatable">
+
+    <div id="wrapper3" class="data-table-mini" style="padding-top:2%">
+        <label  style="font-size: 24px;padding-top:15%;padding-bottom:4%;"><b>Transaction ID # <%=data[0].id%></b></label>
+        <div style="font-size: 24px;padding-top:2%;padding-bottom:1%;">
+            <label  ><b>Info</b></label></div>
+        <table cellpadding="11">
+            <!--     <tr>
+            <td class="label">Transaction ID</td><td>: <%=data[0].id%></td>
+        </tr>-->
+            <tr>
+                <td class="label" valign="top">Bank</td><td  align="right"><%=data[0].bank%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">iGift Amount</td><td  align="right"><%=data[0].promize_amount%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">iGift Bank</td><td  align="right"><%=data[0].promize_bank%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">From Account</td><td  align="right"><%=data[0].from_account%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">To Account</td><td  align="right"><%=data[0].to_account%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">Type</td><td  align="right"><%=data[0].type%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">Timestamp</td><td  align="right"><%=moment(parseInt(data[0].timestamp)).format("DD MMM YYYY hh:mm:ss a")%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">From Zaddress</td><td  align="right"><%=data[0].from_zaddress%></td>
+            </tr>
+            <tr>
+                <td class="label" valign="top">To Zaddress</td><td  align="right"><%=data[0].to_zaddress%></td>
+            </tr>
+
+
+
+        </table>
+
+    </div>
+</div>
+
+<%- include layouts/footer.ejs %>

@@ -1,0 +1,111 @@
+
+
+<%- include layouts/header.ejs %>
+
+<div id="mySidenav" class="sidenav" style="width: 16%;" >
+    <img  src="../images/bank-logo-light.png" style="padding-left:10%;padding-bottom: 5%;padding-top:10%;" >
+    <a  class="active" href="/allblocks" style="padding-left:10%;">Blocks</a>
+    <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
+    <a  class="navBar" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
+    <a  class="navBar" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
+    <a  class="navBar" href="/users" style="padding-left:10%;" > Users</a>
+    <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
+</div>
+<style>
+    div#status{position:fixed; font-size:24px;}
+    div#wrap{width:800px; margin:0px auto;}
+/*    div.newData{height:1000px; background:#09F; margin:10px 0px;}*/
+    div.newData{}
+</style>
+
+<script>
+     $(window).scroll(function() {
+       //yHandler();
+
+    });
+
+
+    function yHandler(){
+
+        var wrap = document.getElementById('wrap');
+        var contentHeight = wrap.offsetHeight;
+        var yOffset = window.pageYOffset;
+        var y = yOffset + window.innerHeight;
+        var time= null;
+        if(y >= contentHeight){
+
+
+
+            $.getJSON('/allblocks_next/' + $("#blockrows tr:last>td:first").text(), function(data){
+
+             data.filter(function (data, i){
+                   var url = '/allblocks/'
+      /*           time =  moment( data.timestamp).format( 'MMMM Do YYYY, h:mm:ss a');*/
+                 $("#blockrows").append("<tr class='clickable-row' data-href='"+url+data.id+"' ><td><a href="+url+data.id+" > " +  data.id + "</a></td><td>"+ moment(parseInt(data.timestamp)).format("DD MMM YYYY hh:mm:ss a")+"</td><td>" + data.transactions.length + "</td> <td>" + data.miner + "</td> </tr>");
+             });
+         })
+        }
+    }
+    //window.onscroll = yHandler;
+
+</script>
+
+<div class="page-data" id="datatable" >
+
+
+    <div style="padding-left:20%;padding-bottom: 3%;padding-top: 2%;width: 100%;">
+        <form method="post" action="/allblocks_search">
+        <input type="text" placeholder="    Search by Block ID.." name="id" style="width: 71%; border-radius: 25px;">
+       <button type="submit" class="a-inside edit" style=" border-radius: 25px;">Search</button>
+        </form>
+    </div>
+
+    <div class="data-table">
+             <table cellspacing="0" cellpadding="0">
+           <!-- <lable ><b> Block List</b></lable>-->
+
+            <tr >
+                <th>Block ID</th>
+                <th>Timestamp</th>
+                <th>Transaction Count</th>
+                <th>Mined by</th>
+            </tr>
+
+                 <tbody id="blockrows">
+            <% if(data.length){
+
+            for(var i = 0;i < data.length;i++) {
+
+                %>
+
+            <tr class=''>
+                <td><a href='/allblocks/<%= data[i].id %>'><%=data[i].id%></a></td>
+                <td><%= moment(parseInt(data[i].timestamp)).format("DD MMM YYYY hh:mm:ss a")%></td>
+                <td><%= data[i].transactions.length %></td>
+                <td><%= data[i].miner %></td>
+            </tr>
+
+
+            <% }
+
+            }else{ %>
+            <tr>
+                <td colspan="6">No data available</td>
+            </tr>
+            <% } %>
+                 </tbody>
+
+        </table>
+       <div align="right" style="padding-top: 2%;">
+
+            <a class="a-inside edit" href="/allblocks_previous/<%=data.length%>">Previous</a><a class="a-inside edit" href='/allblocks_next/<%=data.length%>'>Next</a>
+
+        </div>
+    </div>
+    <div id="status"></div>
+    <div id="wrap">
+</div>
+
+
+
+<%- include layouts/footer.ejs %>

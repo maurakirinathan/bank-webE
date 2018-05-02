@@ -1,0 +1,58 @@
+<%- include layouts/header.ejs %>
+<div id="mySidenav" class="sidenav" style="width: 16%;" >
+    <img  src="../images/bank-logo-light.png" style="padding-left:10%;padding-bottom: 5%;padding-top:10%;" >
+    <a  class="navBar" href="/allblocks" style="padding-left:10%;">Blocks</a>
+    <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
+    <a  class="navBar" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
+    <a  class="active" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
+    <a  class="navBar" href="/users" style="padding-left:10%;" > Users</a>
+    <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
+</div>
+<div class="page-data">
+    <div class="data-table"  id="datatable" style="padding-top:2%"s>
+        <label style="font-size: 24px;padding-top:15%;padding-bottom:4%;"><b>Transactions</b></label>
+        <table  cellpadding="7" cellspacing="7">
+            <!--            <lable ><b> Processing List</b></lable>-->
+            <tr>
+                <th>Transaction ID</th>
+                <th>Bank</th>
+                <th>iGift Amount</th>
+                <th>From Acc</th>
+                <th>To Acc</th>
+                <th>Timestamp</th>
+
+            </tr>
+
+            <% if(data.length){
+
+            for(var i = 0;i < data.length;i++) { %>
+
+<!--            <tr  class='clickable-row' data-href='/processingTransaction/<%= data[i].id %>'>-->
+            <tr>
+                <td><%= data[i].id %></td>
+                <td><%= data[i].bank %></td>
+                <td><%= data[i].promize_amount %></td>
+                <td><%= data[i].from_account %></td>
+                <td><%= data[i].to_account %></td>
+                <td><%= moment(parseInt(data[i].timestamp)).format("DD MMM YYYY hh:mm:ss a")%></td>
+                <!-- <td>
+                    <a class="a-inside edit" href="/pendingTransaction/<%=data[i].id%>">View</a>
+                </td>-->
+
+            </tr>
+            <% }
+
+            }else{ %>
+            <tr>
+                <td colspan="6">No data available</td>
+            </tr>
+            <% } %>
+
+        </table>
+<!--        <div align="right" style="padding-top: 2%;">
+            <% if(data.length){%>
+            <a class="a-inside edit" href="/allcheques_previous/<%=data[0].id%>">Previous</a><a class="a-inside edit" href='/allcheques_next/<%=data[data.length-1].id%>'>Next</a>
+            <%}%>
+        </div>-->
+    </div>
+</div>
