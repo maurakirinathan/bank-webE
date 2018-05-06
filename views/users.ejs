@@ -67,6 +67,7 @@
                 <th>Account</th>
                 <th>Verified</th>
                 <th>Active</th>
+                <th>Timestamp</th>
             </tr>
 
                  <tbody id="usersrows">
@@ -80,6 +81,7 @@
                 <td><%= data[i].account %></td>
                 <td><%= data[i].verified %></td>
                 <td><%= data[i].active %></td>
+                <td> <%=  moment(parseInt(data[i].timestamp)).format("DD MMM YYYY hh:mm:ss a") %></td>
             </tr>
 
             <% }
