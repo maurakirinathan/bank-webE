@@ -114,7 +114,7 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            res.render('alltransaction', {page_title: "Transactions Details", data: result});
+            res.render('alltransaction_search', {page_title: "Transactions Details", data: result});
 
         }, function (err) {
             console.trace(err.message);
@@ -122,7 +122,7 @@ exports.list_search = function (req, res) {
     }
     else {
         var result = [];
-        res.render('alltransaction', {page_title: "Transactions Details",});
+        res.render('alltransaction_search', {page_title: "Transactions Details",});
     }
 };
 

@@ -1,4 +1,5 @@
 const  client = require("./cassandrainfo")
+const client_elasticsearch =require("./elasticsearch")
 
 /*
  * GET one trans.
@@ -136,7 +137,7 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            res.render('expireInThreeMonth', {page_title: "expireInThreeMonth Transactions Details", data: result});
+            res.render('expireInThreeMonth_search', {page_title: "expireInThreeMonth Transactions Details", data: result});
 
         }, function (err) {
             console.trace(err.message);
@@ -144,7 +145,7 @@ exports.list_search = function (req, res) {
     }
     else {
         var result = [];
-        res.render('expireInThreeMonth', {page_title: "expireInThreeMonth Transactions Details",});
+        res.render('expireInThreeMonth_search', {page_title: "expireInThreeMonth Transactions Details",});
     }
 
 /*

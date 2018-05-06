@@ -61,7 +61,7 @@
                 <td><%= data[0].transactions[i].promize_amount %></td>
                 <td><%= data[0].transactions[i].from_account %></td>
                 <td><%= data[0].transactions[i].to_account %></td>
-                <td><%= moment(parseInt(data[i].timestamp)).format("DD MMM YYYY hh:mm:ss a")%></td>
+                <td><%= moment(parseInt(data[0].transactions[i].timestamp)).format("DD MMM YYYY hh:mm:ss a")%></td>
 
 
             </tr>

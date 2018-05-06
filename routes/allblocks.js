@@ -32,7 +32,7 @@ exports.list =  function (req, res) {
         var result = [];
         for (var i = 0; i < resp.hits.hits.length; i++) {
             result.push(resp.hits.hits[i]._source);
-            console.log(resp.hits.hits[i]._source.transactions.id.length);
+
         }
       //  console.log(resp.hits.hits);
 
@@ -122,7 +122,7 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            res.render('allblocks', {page_title: "Block Details", data: result});
+            res.render('allblocks_search', {page_title: "Block Details", data: result});
 
         }, function (err) {
             console.trace(err.message);
@@ -130,7 +130,7 @@ exports.list_search = function (req, res) {
     }
     else {
         var result = [];
-        res.render('allblocks', {page_title: "Block Details",});
+        res.render('allblocks_search', {page_title: "Block Details",});
     }
 };
 
@@ -181,7 +181,9 @@ console.log('allblocks_next: list');
         console.log(resp.hits.hits);
         //  console.log(str);
 
-        res.render('allblocks', {page_title: "All Blocks", data: result})
+        var test1=100
+
+        res.render('allblocks', {page_title: "All Blocks", data: result ,data1:test1})
 
     }, function (err) {
         console.trace(err.message);

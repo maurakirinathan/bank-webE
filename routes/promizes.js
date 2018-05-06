@@ -230,7 +230,7 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            res.render('allpromizes', {page_title: "Promizes Details", data: result});
+            res.render('allpromizes_search', {page_title: "Promizes Details", data: result});
 
         }, function (err) {
             console.trace(err.message);
@@ -238,7 +238,7 @@ exports.list_search = function (req, res) {
     }
     else {
         var result = [];
-        res.render('allpromizes', {page_title: "Promizes Details", data: result});
+        res.render('allpromizes_search', {page_title: "Promizes Details", data: result});
     }
 };
 

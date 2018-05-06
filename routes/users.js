@@ -1,4 +1,5 @@
 const client = require("./cassandrainfo")
+const client_elasticsearch =require("./elasticsearch")
 /*
  * GET blocks listing.
  */
@@ -99,7 +100,7 @@ exports.list_search = function (req, res) {
                             {
 
                                 wildcard: {
-                                    id: input.id + "*"
+                                    zaddress: input.id + "*"
 
                                 }
                             }
@@ -116,7 +117,7 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            res.render('users', {page_title: "users Details", data: result});
+            res.render('users_search', {page_title: "users Details", data: result});
 
         }, function (err) {
             console.trace(err.message);
@@ -124,7 +125,7 @@ exports.list_search = function (req, res) {
     }
     else {
         var result = [];
-        res.render('users', {page_title: "users Details",});
+        res.render('users_search', {page_title: "users Details",});
     }
 
   /*  /!* var id = req.params.id;*!/
@@ -238,13 +239,6 @@ exports.list_paging_previous = function (req, res) {
     }
 
     console.log('users_previous: list');
-    var id = req.params.id;
-    var input = JSON.parse(JSON.stringify(req.body));
-
-    var validate = require('uuid-validate');
-
-
-    console.log(input);
 
 
     client_elasticsearch.search({

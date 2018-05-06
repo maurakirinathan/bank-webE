@@ -140,6 +140,7 @@ app.get('/users',auth,users.list);
 app.get('/users_one/:id',auth,users.list_one);
 app.post('/users_search',auth,users.list_search);
 app.get('/users_next/:id',auth,users.list_paging_next);
+app.get('/users_previous/:id',auth,users.list_paging_previous);
 app.get('/user_inactive/:id',auth,users.user_inactive);
 app.get('/user_active/:id',auth,users.user_active);
 

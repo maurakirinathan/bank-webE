@@ -113,7 +113,7 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            res.render('processingTransaction', {page_title: "Processing Transactions Details", data: result});
+            res.render('processingTransaction_search', {page_title: "Processing Transactions Details", data: result});
 
         }, function (err) {
             console.trace(err.message);
@@ -121,7 +121,7 @@ exports.list_search = function (req, res) {
     }
     else {
         var result = [];
-        res.render('processingTransaction', {page_title: "Processing Transactions Details",});
+        res.render('processingTransaction_search', {page_title: "Processing Transactions Details",});
     }
 };
 
