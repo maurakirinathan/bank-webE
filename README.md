@@ -8,12 +8,12 @@ WITH replication = {'class':'NetworkTopologyStrategy', 'DC1':'1'};
 
 # create index
 
-curl -XPUT "http://172.17.0.2:9200/<tablename>" -d '{
+curl -XPUT "http://172.17.0.2:9200/TABLENAME" -d '{
   "settings":{
     "keyspace": "cchain"
   },
   "mappings": {
-    "<tablename>" : {
+    "TABLENAME" : {
       "discover" : ".*"
     }
   }
