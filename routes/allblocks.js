@@ -3,6 +3,8 @@ const client_elasticsearch =require("./elasticsearch")
 /*
  * GET blocks listing.
  */
+
+var JSONObj = new Object();
 exports.list =  function (req, res) {
 
     console.log('allblocks: list');
@@ -34,10 +36,13 @@ exports.list =  function (req, res) {
             result.push(resp.hits.hits[i]._source);
 
         }
-      //  console.log(resp.hits.hits);
+       console.log(resp.hits);
 
+         JSONObj["total"]= resp.hits.total;
+         JSONObj["offset"]= 0;
+         JSONObj["limit"]= 10;
 
-        res.render('allblocks', {page_title: "All Blocks", data: result})
+        res.render('allblocks', {page_title: "All Blocks", data: result, data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -152,7 +157,7 @@ console.log('allblocks_next: list');
 
 
     console.log(input);
-    console.log('blocks: list_search');
+    console.log('blocks: list_next');
 
     client_elasticsearch.search({
         index: 'blocks',
@@ -171,19 +176,21 @@ console.log('allblocks_next: list');
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
         for (var i = 0; i < resp.hits.hits.length; i++) {
             result.push(resp.hits.hits[i]._source);
         }
-        console.log(resp.hits.hits);
+        console.log(resp.hits);
         //  console.log(str);
+        JSONObj["offset"]+= 10;
+        JSONObj["limit"]= 10;
 
         var test1=100
 
-        res.render('allblocks', {page_title: "All Blocks", data: result ,data1:test1})
+        res.render('allblocks', {page_title: "All Blocks", data: result,data1:JSONObj })
 
     }, function (err) {
         console.trace(err.message);
@@ -210,7 +217,7 @@ exports.list_paging_previous = function (req, res) {
 
 
     console.log(input);
-    console.log('promizes: list_search');
+    console.log('promizes: list_privoes');
 
     client_elasticsearch.search({
         index: 'blocks',
@@ -229,17 +236,19 @@ exports.list_paging_previous = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
         for (var i = 0; i < resp.hits.hits.length; i++) {
             result.push(resp.hits.hits[i]._source);
         }
-        console.log(resp.hits.hits);
+        console.log(resp.hits);
         //  console.log(str);
+        JSONObj["offset"]-= 10;
+        JSONObj["limit"]= 10;
 
-        res.render('allblocks', {page_title: "All Blocks", data: result})
+        res.render('allblocks', {page_title: "All Blocks", data: result,data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);

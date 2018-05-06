@@ -101,26 +101,20 @@
        <div align="right" style="padding-top: 2%;">
 
 
-            <a class="a-inside edit" href="/allblocks_previous/<%=data.length%>">Previous</a>
+           <% if(data1.offset!=0){ %>
+            <a class="a-inside edit" href="/allblocks_previous/<%=data1.offset-10%>">Previous</a>
+           <%}%>
 
-           <% if(data.length>=10)
+           <% if((data1.total-data1.offset)>10)
 
-           { %>
+           { console.log("total data  "+(data1.total-data1.offset)); %>
 
-           <a class="a-inside edit" href='/allblocks_next/<%=data.length%>'>Next</a>
+           <a class="a-inside edit" href='/allblocks_next/<%=data1.offset+10%>'>Next</a>
            <%}%>
 
         </div>
 
-<!--        <div align="right" style="padding-top: 2%;">
 
-            <a class="a-inside edit" href="/allblocks_previous/<%=data.length%>">Previous</a>
-
-
-           <a class="a-inside edit" href='/allblocks_next/<%=data.length%>'>Next</a>
-
-
-        </div>-->
     </div>
     <div id="status"></div>
     <div id="wrap">

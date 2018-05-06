@@ -4,6 +4,7 @@ const client_elasticsearch =require("./elasticsearch")
 /*
  * GET one trans.
  */
+var JSONObj = new Object();
 exports.list_one = function (req, res) {
 
     var id = req.params.id;
@@ -28,7 +29,7 @@ exports.list_transection = function (req, res) {
 
     console.log('processingTransaction: list');
 
-    // var id = req.params.id;
+     var id = req.params.id;
     var input = JSON.parse(JSON.stringify(req.body));
 
     var validate = require('uuid-validate');
@@ -63,8 +64,11 @@ exports.list_transection = function (req, res) {
         }
         console.log(resp.hits.hits);
         //  console.log(str);
+        JSONObj["total"]= resp.hits.total;
+        JSONObj["offset"]= 0;
+        JSONObj["limit"]= 10;
 
-        res.render('alltransaction', {page_title: " alltransaction", data: result})
+        res.render('alltransaction', {page_title: " alltransaction", data: result ,data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -134,7 +138,7 @@ var id_for_next=0;
 exports.list_paging_next = function (req, res) {
 
 
-
+    var id = req.params.id;
     id_for_next=id_for_next+10;
     console.log('processingTransaction: list');
     var input = JSON.parse(JSON.stringify(req.body));
@@ -156,7 +160,7 @@ exports.list_paging_next = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -165,8 +169,11 @@ exports.list_paging_next = function (req, res) {
         }
         console.log(resp.hits.hits);
         //  console.log(str);
+        JSONObj["offset"]+= 10;
+        JSONObj["limit"]= 10;
 
-        res.render('alltransaction', {page_title: " alltransaction", data: result})
+
+        res.render('alltransaction', {page_title: " alltransaction", data: result, data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -184,7 +191,7 @@ exports.list_paging_previous = function (req, res) {
     }
     console.log('processingTransaction: list');
 
-    // var id = req.params.id;
+     var id = req.params.id;
     var input = JSON.parse(JSON.stringify(req.body));
 
     var validate = require('uuid-validate');
@@ -210,7 +217,7 @@ exports.list_paging_previous = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -219,8 +226,11 @@ exports.list_paging_previous = function (req, res) {
         }
         console.log(resp.hits.hits);
         //  console.log(str);
+        JSONObj["offset"]-= 10;
+        JSONObj["limit"]= 10;
 
-        res.render('alltransaction', {page_title: " alltransaction", data: result})
+
+        res.render('alltransaction', {page_title: " alltransaction", data: result, data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);
