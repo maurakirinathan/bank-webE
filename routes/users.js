@@ -5,7 +5,45 @@ const client = require("./cassandrainfo")
 exports.list = function (req, res) {
 
     console.log('users: list');
-    client.execute('SELECT * FROM users LIMIT 10', [], function (err, result) {
+
+
+    var input = JSON.parse(JSON.stringify(req.body));
+    console.log(input);
+    client_elasticsearch.search({
+        index: 'users',
+
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {bank: "sampath"}
+                        }
+                    ]
+                }
+            },
+            sort: [
+                {timestamp: "desc"}
+            ],
+            from: 0, size: 10
+        }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        //  console.log(resp.hits.hits);
+
+
+        res.render('users', {page_title: "All users", data: result})
+
+    }, function (err) {
+        console.trace(err.message);
+    });
+
+
+    /*client.execute('SELECT * FROM users LIMIT 10', [], function (err, result) {
         if (err) {
             console.log('users: list err:', err);
             res.status(404).send({msg: err});
@@ -13,7 +51,7 @@ exports.list = function (req, res) {
             console.log('users: list succ:', result.rows);
             res.render('users', {page_title: "All Users", data: result.rows})
         }
-    });
+    });*/
 
 };
 
@@ -44,12 +82,57 @@ exports.list_one = function (req, res) {
  */
 exports.list_search = function (req, res) {
 
-    /* var id = req.params.id;*/
+
+    // var id = req.params.id;
+    var input = JSON.parse(JSON.stringify(req.body));
+
+    console.log(input);
+    console.log('users: list_search');
+    if (input.id) {
+        client_elasticsearch.search({
+            index: 'users',
+
+            body: {
+                query: {
+                    bool: {
+                        must: [
+                            {
+
+                                wildcard: {
+                                    id: input.id + "*"
+
+                                }
+                            }
+
+                        ]
+                    }
+
+                }
+            }
+        }).then(function (resp) {
+            var result = [];
+            for (var i = 0; i < resp.hits.hits.length; i++) {
+                result.push(resp.hits.hits[i]._source);
+            }
+            console.log(resp.hits.hits);
+
+            res.render('users', {page_title: "users Details", data: result});
+
+        }, function (err) {
+            console.trace(err.message);
+        });
+    }
+    else {
+        var result = [];
+        res.render('users', {page_title: "users Details",});
+    }
+
+  /*  /!* var id = req.params.id;*!/
     var input = JSON.parse(JSON.stringify(req.body));
 
     var zaddress = "\'" + input.id + "\'";
-    /*  var validate = require('uuid-validate');
-  */
+    /!*  var validate = require('uuid-validate');
+  *!/
 
     console.log(input);
     console.log('block: list_search');
@@ -64,7 +147,7 @@ exports.list_search = function (req, res) {
             console.log('users: search one succ:');
             res.render('users', {page_title: "User Details", data: result.rows});
         }
-    });
+    });*/
 
 };
 
@@ -72,9 +155,56 @@ exports.list_search = function (req, res) {
 /*
  * GET cheques listing pagging next. run
  */
+var id_for_next=0;
 exports.list_paging_next = function (req, res) {
 
-    console.log('users: list');
+
+    console.log('users_next: list');
+    id_for_next=id_for_next+10;
+    console.log('allblocks_next: list');
+    var id = req.params.id;
+    var input = JSON.parse(JSON.stringify(req.body));
+
+    var validate = require('uuid-validate');
+
+
+    console.log(input);
+    console.log('users: list_search');
+
+    client_elasticsearch.search({
+        index: 'users',
+
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {bank: "sampath"}
+                        }
+                    ]
+                }
+            },
+            sort: [
+                {timestamp: "desc"}
+            ],
+            from: id_for_next, size: 10
+        }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
+        //  console.log(str);
+
+        res.render('users', {page_title: "All users", data: result})
+
+    }, function (err) {
+        console.trace(err.message);
+    });
+
+   /* console.log('users: list');
     var id = "\'" + req.params.id + "\'";
 
     console.log('id:  ' + id);
@@ -91,8 +221,64 @@ exports.list_paging_next = function (req, res) {
             //res.render('allblocks_next', {page_title: "All Blocks", data: result.rows})
 
         }
-    });
+    });*/
 
+};
+
+/*
+ * GET cheques listing pagging previous.
+ */
+exports.list_paging_previous = function (req, res) {
+
+
+    id_for_next=id_for_next-10;
+    if(id_for_next<0)
+    {
+        id_for_next=0;
+    }
+
+    console.log('users_previous: list');
+    var id = req.params.id;
+    var input = JSON.parse(JSON.stringify(req.body));
+
+    var validate = require('uuid-validate');
+
+
+    console.log(input);
+
+
+    client_elasticsearch.search({
+        index: 'users',
+
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {bank: "sampath"}
+                        }
+                    ]
+                }
+            },
+            sort: [
+                {timestamp: "desc"}
+            ],
+            from: id_for_next, size: 10
+        }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
+        //  console.log(str);
+
+        res.render('users', {page_title: "All users", data: result})
+
+    }, function (err) {
+        console.trace(err.message);
+    });
 };
 
 

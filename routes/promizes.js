@@ -2,26 +2,11 @@ const client = require("./cassandrainfo")
 const client_elasticsearch =require("./elasticsearch")
 
 /*
-var PropertiesReader = require('properties-reader');
-var elasticsearch = require('elasticsearch');
-
-var properties = PropertiesReader('PropertiesReader.js');
-var host = properties.get('db.host');
-var elasassandra_port = properties.get('db.elasassandra');
-
-
-var client_elasticsearch = new elasticsearch.Client({
-    host: host + ':' + elasassandra_port,
-});
-*/
-
-
-/*
  * GET cheques listing pagging next.
  */
-var test1=0;
+var id_for_next=0;
 exports.list_paging_next = function (req, res) {
-    test1=test1+10;
+    id_for_next=id_for_next+10;
 
     console.log('allcheques: list');
     var id = req.params.id;
@@ -49,9 +34,9 @@ exports.list_paging_next = function (req, res) {
                 }
             },
             sort: [
-                {amount: "desc"}
+                {timestamp: "desc"}
             ],
-            from: test1, size: 10
+            from: id_for_next, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -73,10 +58,10 @@ exports.list_paging_next = function (req, res) {
  * GET cheques listing pagging previous.
  */
 exports.list_paging_previous = function (req, res) {
-    test1=test1-10;
-    if(test1<0)
+    id_for_next=id_for_next-10;
+    if(id_for_next<0)
     {
-        test1=0;
+        id_for_next=0;
     }
 
    console.log('allcheques: list');
@@ -105,9 +90,9 @@ exports.list_paging_previous = function (req, res) {
                 }
             },
             sort: [
-                {amount: "desc"}
+                {timestamp: "desc"}
             ],
-            from: test1, size: 10
+            from: id_for_next, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -129,10 +114,6 @@ exports.list_paging_previous = function (req, res) {
 
 
 
-
-//SELECT * FROM cheques WHERE expr(cheque_lucene_index, '{ sort: [ {type: "simple", field: "id", reverse: true} ] }') AND bank='sampath' AND id < 4f3211e0-1b82-11e8-b813-6d2c86545d91 LIMIT 2 ;
-
-//SELECT * FROM cheques WHERE expr(cheque_lucene_index, '{ sort: [ {type: "simple", field: "id", reverse: true} ] }') AND bank='sampath' AND id < 7a22c8be-0407-11e8-ba89-0ed5f89f718b LIMIT 2 ;
 
 /*
  * GET cheques listing .
@@ -186,21 +167,6 @@ exports.list = function (req, res) {
         res.render('allpromizes', {page_title: "Promizes Details", data: result});
     }*/
 };
-/*
-exports.list = function (req, res) {
-
-    console.log('allcheques: list');
-    client.execute('SELECT id,bank,amount FROM promizes LIMIT 10', [], function (err, result) {
-        if (err) {
-            console.log('allpromizes: list err:', err);
-            res.status(404).send({msg: err});
-        } else {
-            console.log('allpromizes: list succ:', result.rows);
-            res.render('allpromizes', {page_title: "All Promizes", data: result.rows})
-        }
-    });
-};
-*/
 
 /*
  * GET one cheque detail.

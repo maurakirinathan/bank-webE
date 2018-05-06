@@ -28,6 +28,10 @@ var allpromizes = require('./routes/promizes');
 //load all trans
 var allTransactions = require('./routes/allTransactions');
 
+
+//load all expireInThreeMonths
+var expireInThreeMonth = require('./routes/expireInThreeMonth');
+
 //load users
 var users = require('./routes/users');
 
@@ -138,6 +142,13 @@ app.post('/users_search',auth,users.list_search);
 app.get('/users_next/:id',auth,users.list_paging_next);
 app.get('/user_inactive/:id',auth,users.user_inactive);
 app.get('/user_active/:id',auth,users.user_active);
+
+
+app.get('/expireInThreeMonthTransaction',auth,expireInThreeMonth.list_transection);
+app.post('/expireInThreeMonth_search',auth,expireInThreeMonth.list_search);
+app.get('/expireInThreeMonthview/:id',auth,expireInThreeMonth.list_one);
+app.get('/expireInThreeMonth_previous/:id',auth,expireInThreeMonth.list_paging_previous);
+app.get('/expireInThreeMonth_next/:id',auth,expireInThreeMonth.list_paging_next);
 
 // Login endpoint
 app.get('/login', function (req, res) {

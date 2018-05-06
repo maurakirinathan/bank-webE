@@ -3,9 +3,9 @@
 
 <div id="mySidenav" class="sidenav" style="width: 16%;" >
     <img  src="../images/bank-logo-light.png"  class="imageclass" >
-    <a  class="navBar" href="/allblocks" style="padding-left:10%;">Blocks</a>
+    <a  class="active" href="/allblocks" style="padding-left:10%;">Blocks</a>
     <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
-    <a  class="active" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
+    <a  class="navBar" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
     <a  class="navBar" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
     <a  class="navBar" href="/users" style="padding-left:10%;" > Users</a>
     <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
@@ -19,7 +19,7 @@
 <script>
 
     $(window).scroll(function() {
-        //yHandler();
+        yHandler();
     });
 
 
@@ -33,10 +33,10 @@
             // Ajax call to get more dynamic data goes here
 
 
-            $.getJSON('/allTransaction_next/' + $("#transectionview tr:last>td:first").text(), function(data){
+            $.getJSON('/expireInThreeMonth_next/' + $("#expiretransectionview tr:last>td:first").text(), function(data){
                 data.filter(function (data, i){
-                    var url = '/transectionview/'
-                    $("#transectionview").append("<tr class='clickable-row' ><td><a href="+url+data.id+" > " +  data.id + "</a></td> <td>" +data.bank + "</td> <td>" + data.promize_amount + "</td> <td>" + data.from_account + "</td><td>" + data.to_account + "</td><td>" +moment(parseInt(data.timestamp)).format("DD MMM YYYY hh:mm:ss a") + "</td> </tr>");
+                    var url = '/expireInThreeMonthview/'
+                    $("#expiretransectionview").append("<tr class='clickable-row' ><td><a href="+url+data.id+" > " +  data.id + "</a></td> <td>" +data.bank + "</td> <td>" + data.promize_amount+".00" + "</td> <td>" + data.from_account + "</td><td>" + data.to_account + "</td><td>" +moment(parseInt(data.timestamp)).format("DD MMM YYYY hh:mm:ss a") + "</td> </tr>");
                 });
             })
         }
@@ -48,7 +48,7 @@
 <div class="page-data" id="datatable">
 
     <div style="padding-left:20%;padding-bottom: 3%;padding-top: 2%;width: 100%;">
-        <form method="post" action="/transection_search">
+        <form method="post" action="/expireInThreeMonth_search">
             <input type="text" placeholder="    Search by Transaction ID.." name="id" style="width: 71%; border-radius: 25px;">
             <button type="submit" class="a-inside edit" style=" border-radius: 25px;">Search</button>
         </form>
@@ -66,15 +66,15 @@
 
             </tr>
 
-            <tbody id="transectionview">
+            <tbody id="expiretransectionview">
             <% if(data.length){
 
             for(var i = 0;i < data.length;i++) { %>
 
             <tr  class='' >
-                <td><a  href='/transectionview/<%= data[i].id %>'><%= data[i].id %></a></td>
+                <td><a  href='/expireInThreeMonthview/<%= data[i].id %>'><%= data[i].id %></a></td>
                 <td><%= data[i].bank %></td>
-                <td><%= data[i].promize_amount %></td>
+                <td><%= data[i].promize_amount+".00" %></td>
                 <td><%= data[i].from_account %></td>
                 <td><%= data[i].to_account %></td>
                 <td> <%=  moment(parseInt(data[i].timestamp)).format("DD MMM YYYY hh:mm:ss a") %></td>
@@ -93,9 +93,9 @@
             </tbody>
 
         </table>
-    <div align="right" style="padding-top: 2%;">
+        <div align="right" style="padding-top: 2%;">
 
-            <a class="a-inside edit" href="/allTransaction_previous/<%=data.length%>">Previous</a><a class="a-inside edit" href='/allTransaction_next/<%=data.length%>'>Next</a>
+            <a class="a-inside edit" href="/expireInThreeMonth_previous/<%=data.length%>">Previous</a><a class="a-inside edit" href='/expireInThreeMonth_next/<%=data.length%>'>Next</a>
 
         </div>
     </div>
