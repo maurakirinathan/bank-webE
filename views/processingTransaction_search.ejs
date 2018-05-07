@@ -103,6 +103,13 @@
 
         </table>
         <div align="right" style="padding-top: 2%;">
+            <label  style="font-weight: bold">Total Search Results : <%=data2.total%> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</label>
+            <% if(data.length>=10)
+            {  %>
+            <label style="font-weight: bold">Showing : <%=data2.offset+1%> to <%=data2.offset+10%>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; </label>
+            <%} else {%>
+            <label style="font-weight: bold">Showing : <%=data2.offset+1%> to <%=data2.offset+data.length%> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;</label>
+            <%}%>
             <% if(data2.offset!=0){ %>
             <a class="a-inside edit" href="/processingTransaction_search_previous/<%=data2.offset-10%>">Previous</a>
             <%}%>
