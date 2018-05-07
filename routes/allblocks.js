@@ -1,21 +1,22 @@
-const  client = require("./cassandrainfo")
-const client_elasticsearch =require("./elasticsearch")
+const client = require("./cassandrainfo")
+const client_elasticsearch = require("./elasticsearch")
 /*
  * GET blocks listing.
  */
 
 var JSONObj = new Object();
 var JSONObj_search = new Object();
-exports.list =  function (req, res) {
+exports.list = function (req, res) {
 
     console.log('allblocks: list');
 
     var input = JSON.parse(JSON.stringify(req.body));
     console.log(input);
-     client_elasticsearch.search({
+    client_elasticsearch.search({
         index: 'blocks',
 
         body: {
+            _source: ["id", "timestamp", "transactions", "miner"],
             query: {
 
                 bool: {
@@ -37,19 +38,18 @@ exports.list =  function (req, res) {
             result.push(resp.hits.hits[i]._source);
 
         }
-       console.log(resp.hits);
+        console.log(resp.hits);
 
-         JSONObj["total"]= resp.hits.total;
-         JSONObj["offset"]= 0;
-         JSONObj["limit"]= 10;
+        JSONObj["total"] = resp.hits.total;
+        JSONObj["offset"] = 0;
+        JSONObj["limit"] = 10;
 
-        res.render('allblocks', {page_title: "All Blocks", data: result, data1:JSONObj})
+        res.render('allblocks', {page_title: "All Blocks", data: result, data1: JSONObj})
 
     }, function (err) {
         console.trace(err.message);
     });
 };
-
 
 
 exports.list_alltransaction_blocks = function (req, res) {
@@ -68,10 +68,10 @@ exports.list_alltransaction_blocks = function (req, res) {
 };
 
 
-
 /*
  * GET one block.
  */
+/*
 exports.list_one = function (req, res) {
 
     var id = req.params.id;
@@ -88,6 +88,49 @@ exports.list_one = function (req, res) {
     });
 
 };
+*/
+
+
+/*
+ * GET one block.
+ */
+exports.list_one = function (req, res) {
+
+    var id = req.params.id;
+    var input = JSON.parse(JSON.stringify(req.body));
+
+    console.log(input);
+    console.log('blocks: list_search');
+
+        client_elasticsearch.search({
+            index: 'blocks',
+
+            body: {
+                query: {
+                    bool: {
+                        must: [
+                            {
+                                term: {id: id}
+                            }
+                        ]
+                    }
+
+                }
+            }
+        }).then(function (resp) {
+            var result = [];
+            for (var i = 0; i < resp.hits.hits.length; i++) {
+                result.push(resp.hits.hits[i]._source);
+            }
+            console.log(resp.hits.hits);
+
+
+            res.render('blockViewOne', {page_title: "Block Details", data: result});
+
+        }, function (err) {
+            console.trace(err.message);
+        });
+  };
 
 
 /*
@@ -132,12 +175,12 @@ exports.list_search = function (req, res) {
             }
             console.log(resp.hits.hits);
 
-            JSONObj_search["total"]= resp.hits.total;
-            JSONObj_search["offset"]= 0;
-            JSONObj_search["limit"]= 10;
-            JSONObj_search["search_field"]= input.id;
+            JSONObj_search["total"] = resp.hits.total;
+            JSONObj_search["offset"] = 0;
+            JSONObj_search["limit"] = 10;
+            JSONObj_search["search_field"] = input.id;
 
-            res.render('allblocks_search', {page_title: "Block Details", data: result ,data2:JSONObj_search});
+            res.render('allblocks_search', {page_title: "Block Details", data: result, data2: JSONObj_search});
 
         }, function (err) {
             console.trace(err.message);
@@ -150,16 +193,15 @@ exports.list_search = function (req, res) {
 };
 
 
-
 /*
  * GET cheques listing pagging next. run
  */
-var id_for_next=0;
+var id_for_next = 0;
 exports.list_paging_next = function (req, res) {
 
 
-    id_for_next=id_for_next+10;
-console.log('allblocks_next: list');
+    id_for_next = id_for_next + 10;
+    console.log('allblocks_next: list');
     var id = req.params.id;
     var input = JSON.parse(JSON.stringify(req.body));
 
@@ -195,12 +237,12 @@ console.log('allblocks_next: list');
         }
         console.log(resp.hits);
         //  console.log(str);
-        JSONObj["offset"]+= 10;
-        JSONObj["limit"]= 10;
+        JSONObj["offset"] += 10;
+        JSONObj["limit"] = 10;
 
-        var test1=100
+        var test1 = 100
 
-        res.render('allblocks', {page_title: "All Blocks", data: result,data1:JSONObj })
+        res.render('allblocks', {page_title: "All Blocks", data: result, data1: JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -213,10 +255,9 @@ console.log('allblocks_next: list');
 exports.list_paging_previous = function (req, res) {
 
 
-    id_for_next=id_for_next-10;
-    if(id_for_next<0)
-    {
-        id_for_next=0;
+    id_for_next = id_for_next - 10;
+    if (id_for_next < 0) {
+        id_for_next = 0;
     }
 
     console.log('allblocks_previous: list');
@@ -255,10 +296,10 @@ exports.list_paging_previous = function (req, res) {
         }
         console.log(resp.hits);
         //  console.log(str);
-        JSONObj["offset"]-= 10;
-        JSONObj["limit"]= 10;
+        JSONObj["offset"] -= 10;
+        JSONObj["limit"] = 10;
 
-        res.render('allblocks', {page_title: "All Blocks", data: result,data1:JSONObj})
+        res.render('allblocks', {page_title: "All Blocks", data: result, data1: JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -266,59 +307,57 @@ exports.list_paging_previous = function (req, res) {
 };
 
 
-
 /*
  * SEARCH NEXT one block.
  */
 exports.list_search_next = function (req, res) {
 
-     var id = req.params.id;
+    var id = req.params.id;
 
 
     console.log('blocks: list_search_next');
 
-        client_elasticsearch.search({
-            index: 'blocks',
+    client_elasticsearch.search({
+        index: 'blocks',
 
-            body: {
-                query: {
-                    bool: {
-                        must: [
-                            {
+        body: {
+            query: {
+                bool: {
+                    must: [
+                        {
 
-                                wildcard: {
-                                    id: JSONObj_search.search_field+ "*"
+                            wildcard: {
+                                id: JSONObj_search.search_field + "*"
 
-                                }
                             }
+                        }
 
-                        ]
-                    }
+                    ]
+                }
 
-                },
-                sort: [
-                    {timestamp: "desc"}
-                ],
-                from: id, size: 10
-            }
-        }).then(function (resp) {
-            var result = [];
-            for (var i = 0; i < resp.hits.hits.length; i++) {
-                result.push(resp.hits.hits[i]._source);
-            }
-            console.log(resp.hits.hits);
+            },
+            sort: [
+                {timestamp: "desc"}
+            ],
+            from: id, size: 10
+        }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
 
-            JSONObj_search["offset"]+= 10;
-            JSONObj_search["limit"]= 10;
+        JSONObj_search["offset"] += 10;
+        JSONObj_search["limit"] = 10;
 
-            res.render('allblocks_search', {page_title: "Block Details", data: result ,data2:JSONObj_search});
+        res.render('allblocks_search', {page_title: "Block Details", data: result, data2: JSONObj_search});
 
-        }, function (err) {
-            console.trace(err.message);
-        });
+    }, function (err) {
+        console.trace(err.message);
+    });
 
 };
-
 
 
 /*
@@ -330,44 +369,44 @@ exports.list_search_previous = function (req, res) {
 
     console.log('blocks: list_search');
 
-        client_elasticsearch.search({
-            index: 'blocks',
+    client_elasticsearch.search({
+        index: 'blocks',
 
-            body: {
-                query: {
-                    bool: {
-                        must: [
-                            {
+        body: {
+            query: {
+                bool: {
+                    must: [
+                        {
 
-                                wildcard: {
-                                    id: JSONObj_search.search_field+ "*"
+                            wildcard: {
+                                id: JSONObj_search.search_field + "*"
 
-                                }
                             }
+                        }
 
-                        ]
-                    }
+                    ]
+                }
 
-                },
-                sort: [
-                    {timestamp: "desc"}
-                ],
-                from: id, size: 10
-            }
-        }).then(function (resp) {
-            var result = [];
-            for (var i = 0; i < resp.hits.hits.length; i++) {
-                result.push(resp.hits.hits[i]._source);
-            }
-            console.log(resp.hits.hits);
+            },
+            sort: [
+                {timestamp: "desc"}
+            ],
+            from: id, size: 10
+        }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
 
-            JSONObj_search["offset"]-= 10;
-            JSONObj_search["limit"]= 10;
+        JSONObj_search["offset"] -= 10;
+        JSONObj_search["limit"] = 10;
 
-            res.render('allblocks_search', {page_title: "Block Details", data: result ,data2:JSONObj_search});
+        res.render('allblocks_search', {page_title: "Block Details", data: result, data2: JSONObj_search});
 
-        }, function (err) {
-            console.trace(err.message);
-        });
+    }, function (err) {
+        console.trace(err.message);
+    });
 
 };

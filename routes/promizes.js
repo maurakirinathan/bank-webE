@@ -25,6 +25,7 @@ exports.list_paging_next = function (req, res) {
         index: 'promizes',
 
         body: {
+            _source: ["id", "bank","amount","origin_account","origin_bank","origin_zaddress","timestamp"],
             query: {
 
                 bool: {

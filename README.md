@@ -87,3 +87,25 @@ curl -XPUT "http://172.17.0.2:9200/users" -d '{
 }'
 ``````
 
+## elastic search select stored_fields
+```
+client_elasticsearch.search({
+        index: 'blocks',
+        body: {
+            _source: ["id", "timestamp", "transactions", "miner"],
+            query: {
+                bool: {
+                    must: [
+                        {
+                            term: {miner: "sampath"}
+                        }
+                    ]
+                }
+            },
+            sort: [
+                {timestamp: "desc"}
+            ],
+            from: 0, size: 10
+        }
+    })
+```
