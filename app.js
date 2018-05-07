@@ -128,6 +128,8 @@ app.get('/processingTransaction/:id',auth,processingTransaction.list_one);
 app.post('/processingTransaction_search',auth,processingTransaction.list_search);
 app.get('/processingTransaction_previous/:id',auth,processingTransaction.list_paging_previous);
 app.get('/processingTransaction_next/:id',auth,processingTransaction.list_paging_next);
+app.get('/processingTransaction_search_next/:id',auth,processingTransaction.list_search_next);
+app.get('/processingTransaction_search_previous/:id',auth,processingTransaction.list_search_previous);
 
 
 //app.get('/alltrans',allTransactions.list_trans);

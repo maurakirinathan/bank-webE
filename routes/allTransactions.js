@@ -110,7 +110,11 @@ exports.list_search = function (req, res) {
                         ]
                     }
 
-                }
+                },
+                sort: [
+                    {timestamp: "desc"}
+                ],
+                from: 0, size: 10
             }
         }).then(function (resp) {
             var result = [];
