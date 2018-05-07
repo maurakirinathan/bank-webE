@@ -39,7 +39,7 @@ exports.list_transection = function (req, res) {
 
 
     client_elasticsearch.search({
-        index: 'trans',
+        index: 'transactions',
 
         body: {
             query: {
@@ -112,10 +112,10 @@ exports.list_search = function (req, res) {
 
 
     console.log(input);
-    console.log('trans: list_search');
+    console.log('transctions: list_search');
     if (input.id) {
         client_elasticsearch.search({
-            index: 'trans',
+            index: 'transctions',
 
             body: {
                 query: {
@@ -193,7 +193,7 @@ exports.list_paging_next = function (req, res) {
     var input = JSON.parse(JSON.stringify(req.body));
     console.log(input);
     client_elasticsearch.search({
-        index: 'trans',
+        index: 'transctions',
 
         body: {
             query: {
@@ -268,7 +268,7 @@ exports.list_paging_previous = function (req, res) {
 
 
     client_elasticsearch.search({
-        index: 'trans',
+        index: 'transctions',
 
         body: {
             query: {

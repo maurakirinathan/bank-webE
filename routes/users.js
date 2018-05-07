@@ -3,6 +3,7 @@ const client_elasticsearch =require("./elasticsearch")
 /*
  * GET blocks listing.
  */
+var JSONObj = new Object();
 exports.list = function (req, res) {
 
     console.log('users: list');
@@ -36,8 +37,12 @@ exports.list = function (req, res) {
         }
         //  console.log(resp.hits.hits);
 
+        JSONObj["total"]= resp.hits.total;
+        JSONObj["offset"]= 0;
+        JSONObj["limit"]= 10;
 
-        res.render('users', {page_title: "All users", data: result})
+
+        res.render('users', {page_title: "All users", data: result ,data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -159,7 +164,7 @@ exports.list_search = function (req, res) {
 var id_for_next=0;
 exports.list_paging_next = function (req, res) {
 
-
+    var id = req.params.id;
     console.log('users_next: list');
     id_for_next=id_for_next+10;
     console.log('allblocks_next: list');
@@ -189,7 +194,7 @@ exports.list_paging_next = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -199,7 +204,9 @@ exports.list_paging_next = function (req, res) {
         console.log(resp.hits.hits);
         //  console.log(str);
 
-        res.render('users', {page_title: "All users", data: result})
+        JSONObj["offset"]+= 10;
+        JSONObj["limit"]= 10;
+        res.render('users', {page_title: "All users", data: result ,data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);
@@ -231,7 +238,7 @@ exports.list_paging_next = function (req, res) {
  */
 exports.list_paging_previous = function (req, res) {
 
-
+    var id = req.params.id;
     id_for_next=id_for_next-10;
     if(id_for_next<0)
     {
@@ -258,7 +265,7 @@ exports.list_paging_previous = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -268,7 +275,9 @@ exports.list_paging_previous = function (req, res) {
         console.log(resp.hits.hits);
         //  console.log(str);
 
-        res.render('users', {page_title: "All users", data: result})
+        JSONObj["offset"]-= 10;
+        JSONObj["limit"]= 10;
+        res.render('users', {page_title: "All users", data: result ,data1:JSONObj})
 
     }, function (err) {
         console.trace(err.message);

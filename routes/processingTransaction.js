@@ -226,7 +226,7 @@ exports.list_paging_previous = function (req, res) {
         }
         console.log(resp.hits.hits);
         //  console.log(str);
-        JSONObj["offset"]+= 10;
+        JSONObj["offset"]-= 10;
         JSONObj["limit"]= 10;
 
         res.render('processingTransaction', {page_title: " processingTransaction", data: result, data1:JSONObj})

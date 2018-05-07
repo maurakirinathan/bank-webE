@@ -37,7 +37,7 @@ exports.list_paging_next = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -47,11 +47,12 @@ exports.list_paging_next = function (req, res) {
         console.log(resp.hits.hits);
         //  console.log(str);
 
-        JSONObj["total"]= resp.hits.total;
-        JSONObj["offset"]= 0;
+
+        JSONObj["offset"]+= 10;
         JSONObj["limit"]= 10;
 
-        res.render('allpromizes', {page_title: "Promizes Details", data: result,data1:JSONObj});
+
+        res.render('allpromizes', {page_title: "Promizes Details", data: result, data1: JSONObj});
 
     }, function (err) {
         console.trace(err.message);
@@ -97,7 +98,7 @@ exports.list_paging_previous = function (req, res) {
             sort: [
                 {timestamp: "desc"}
             ],
-            from: id_for_next, size: 10
+            from: id, size: 10
         }
     }).then(function (resp) {
         var result = [];
@@ -106,8 +107,11 @@ exports.list_paging_previous = function (req, res) {
         }
         console.log(resp.hits.hits);
         //  console.log(str);
+        JSONObj["offset"]-= 10;
+        JSONObj["limit"]= 10;
 
-        res.render('allpromizes', {page_title: "Promizes Details", data: result});
+
+        res.render('allpromizes', {page_title: "Promizes Details", data: result, data1: JSONObj});
 
     }, function (err) {
         console.trace(err.message);
@@ -160,8 +164,12 @@ exports.list = function (req, res) {
             }
             console.log(resp.hits.hits);
           //  console.log(str);
+            JSONObj["total"]= resp.hits.total;
+            JSONObj["offset"]= 0;
+            JSONObj["limit"]= 10;
 
-            res.render('allpromizes', {page_title: "Promizes Details", data: result});
+            res.render('allpromizes', {page_title: "Promizes Details", data: result,data1:JSONObj});
+
 
         }, function (err) {
             console.trace(err.message);

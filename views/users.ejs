@@ -9,6 +9,7 @@
     <a  class="navBar" href="/processingTransaction"  style="padding-left:10%;">  Processing Transactions</a>
     <a  class="navBar" href="/alltransaction" style="padding-left:10%;">  All Transactions</a>
     <a  class="navBar" href="/allpromizes" style="padding-left:10%;" > iGifts</a>
+<!--    <a  class="navBar" href="/expireInThreeMonthTransaction" style="padding-left:10%;" > Expire In Three Month</a>-->
     <a  class="active" href="/users" style="padding-left:10%;" > Users</a>
     <a  class="navBar" href="/logout" style="padding-left:10%;">  Logout</a>
 </div>
@@ -95,12 +96,13 @@
 
         </table>
         <div align="right" style="padding-top: 2%;">
-
-            <a class="a-inside edit" href="/users_previous/<%=data.length%>">Previous</a>
-            <% if(data.length>=10) { %>
-            <a class="a-inside edit" href='/users_next/<%=data.length%>'>Next</a>
-            <% } %>
-
+            <% if(data1.offset!=0){ %>
+            <a class="a-inside edit" href="/users_previous/<%=data1.offset-10%>">Previous</a>
+            <%}%>
+            <% if((data1.total-data1.offset)>10)
+            { console.log("total data  "+(data1.total-data1.offset)); %>
+            <a class="a-inside edit" href='/users_next/<%=data1.offset+10%>'>Next</a>
+            <%}%>
         </div>
 
     </div>
