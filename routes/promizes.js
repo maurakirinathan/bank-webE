@@ -25,7 +25,7 @@ exports.list_paging_next = function (req, res) {
         index: 'promizes',
 
         body: {
-            _source: ["id", "bank","amount","origin_account","origin_bank","origin_zaddress","timestamp"],
+            _source: ["id", "bank","amount"],
             query: {
 
                 bool: {
@@ -87,6 +87,7 @@ exports.list_paging_previous = function (req, res) {
         index: 'promizes',
 
         body: {
+            _source: ["id", "bank","amount"],
             query: {
 
                 bool: {
@@ -144,6 +145,7 @@ exports.list = function (req, res) {
             index: 'promizes',
 
             body: {
+                _source: ["id", "bank","amount"],
                 query: {
 
                     bool: {
@@ -193,6 +195,7 @@ exports.list_one = function (req, res) {
         index: 'promizes',
 
         body: {
+            _source: ["id", "bank","amount","origin_account","origin_bank","origin_zaddress","timestamp"],
             query: {
 
                 bool: {
@@ -238,6 +241,7 @@ exports.list_search = function (req, res) {
             index: 'promizes',
 
             body: {
+                _source: ["id", "bank","amount"],
                 query: {
                     bool: {
                         must: [
@@ -286,18 +290,6 @@ exports.list_search = function (req, res) {
 
 
 exports.transactions_for_promize = function (req, res) {
-
-/*    var id = req.params.id;
-    client.execute("select id,bank,promize_amount,from_account,to_account,timestamp from transactions where promize_id=" + id + " ALLOW FILTERING", [], function (err, result) {
-        if (err) {
-            console.log('alltransaction_promize: list err:', err);
-            res.status(404).send({msg: err});
-        } else {
-            console.log('alltransaction_promize: list succ:', result.rows);
-            res.render('alltransaction_promize', {page_title: "All Transactions", data: result.rows})
-        }
-    });*/
-
 
     var id = req.params.id;
     client_elasticsearch.search({
@@ -349,6 +341,7 @@ exports.list_search_next = function (req, res) {
         index: 'promizes',
 
         body: {
+            _source: ["id", "bank","amount"],
             query: {
                 bool: {
                     must: [
@@ -404,6 +397,7 @@ exports.list_search_previous = function (req, res) {
         index: 'promizes',
 
         body: {
+            _source: ["id", "bank","amount"],
             query: {
                 bool: {
                     must: [
