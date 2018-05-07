@@ -273,9 +273,8 @@ exports.list_paging_previous = function (req, res) {
 exports.list_search_next = function (req, res) {
 
      var id = req.params.id;
-    var input = JSON.parse(JSON.stringify(req.body));
 
-    console.log("sfsdfsfsdffsfsd"+input.id);
+
     console.log('blocks: list_search_next');
 
         client_elasticsearch.search({
@@ -328,9 +327,7 @@ exports.list_search_next = function (req, res) {
 exports.list_search_previous = function (req, res) {
 
     var id = req.params.id;
-    var input = JSON.parse(JSON.stringify(req.body));
 
-    console.log(input);
     console.log('blocks: list_search');
 
         client_elasticsearch.search({

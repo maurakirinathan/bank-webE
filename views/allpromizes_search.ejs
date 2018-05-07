@@ -97,6 +97,15 @@
             </tbody>
 
         </table>
+        <div align="right" style="padding-top: 2%;">
+            <% if(data2.offset!=0){ %>
+            <a class="a-inside edit" href="/allpromizes_search_previous/<%=data2.offset-10%>">Previous</a>
+            <%}%>
+            <% if((data2.total-data2.offset)>10)
+            { console.log("total data  "+(data2.total-data2.offset)); %>
+            <a class="a-inside edit" href='/allpromizes_search_next/<%=data2.offset+10%>'>Next</a>
+            <%}%>
+        </div>
 
     </div>
     <div id="status"></div>

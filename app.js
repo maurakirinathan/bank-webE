@@ -121,6 +121,8 @@ app.get('/allpromizes_previous/:id',allpromizes.list_paging_previous);
 app.get('/allpromizes_next/:id',auth,allpromizes.list_paging_next);
 app.get('/promizesview/:id',auth,allpromizes.list_one);
 app.post('/allpromizes_search',auth,allpromizes.list_search);
+app.get('/allpromizes_search_next/:id',auth,allpromizes.list_search_next);
+app.get('/allpromizes_search_previous/:id',auth,allpromizes.list_search_previous);
 
 
 app.get('/processingTransaction',auth,processingTransaction.list);
@@ -149,6 +151,9 @@ app.get('/users_next/:id',auth,users.list_paging_next);
 app.get('/users_previous/:id',auth,users.list_paging_previous);
 app.get('/user_inactive/:id',auth,users.user_inactive);
 app.get('/user_active/:id',auth,users.user_active);
+app.get('/users_search_next/:id',auth,users.list_search_next);
+app.get('/users_search_previous/:id',auth,users.list_search_previous);
+
 
 
 app.get('/expireInThreeMonthTransaction',auth,expireInThreeMonth.list_transection);
