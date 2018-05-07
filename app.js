@@ -108,6 +108,8 @@ app.get('/allblocks',auth,allblocks.list);
 app.get('/allblocks/:id',auth,allblocks.list_one);
 app.post('/allblocks_search',auth,allblocks.list_search);
 app.post('/alltransaction_blocks',auth,allblocks.list_alltransaction_blocks);
+app.get('/allblocks_search_next/:id',auth,allblocks.list_search_next);
+app.get('/allblocks_search_previous/:id',auth,allblocks.list_search_previous);
 
 app.get('/allblocks_previous/:id',auth,allblocks.list_paging_previous);
 app.get('/allblocks_next/:id',auth,allblocks.list_paging_next);
@@ -134,6 +136,8 @@ app.post('/transection_search',auth,allTransactions.list_search);
 app.get('/transectionview/:id',auth,allTransactions.list_one);
 app.get('/allTransaction_previous/:id',auth,allTransactions.list_paging_previous);
 app.get('/allTransaction_next/:id',auth,allTransactions.list_paging_next);
+app.get('/allTransaction_search_next/:id',auth,allTransactions.list_search_next);
+app.get('/allTransaction_search_previous/:id',auth,allTransactions.list_search_previous);
 
 
 app.get('/users',auth,users.list);
