@@ -107,7 +107,7 @@ app.get('/',index.index);
 app.get('/allblocks',auth,allblocks.list);
 app.get('/allblocks/:id',auth,allblocks.list_one);
 app.post('/allblocks_search',auth,allblocks.list_search);
-app.post('/alltransaction_blocks',auth,allblocks.list_alltransaction_blocks);
+//app.post('/alltransaction_blocks',auth,allblocks.list_alltransaction_blocks);
 app.get('/allblocks_search_next/:id',auth,allblocks.list_search_next);
 app.get('/allblocks_search_previous/:id',auth,allblocks.list_search_previous);
 

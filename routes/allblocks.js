@@ -52,6 +52,7 @@ exports.list = function (req, res) {
 };
 
 
+/*
 exports.list_alltransaction_blocks = function (req, res) {
 
     console.log('alltransaction_blocks: list');
@@ -66,6 +67,7 @@ exports.list_alltransaction_blocks = function (req, res) {
     });
 
 };
+*/
 
 
 /*
@@ -106,6 +108,7 @@ exports.list_one = function (req, res) {
             index: 'blocks',
 
             body: {
+
                 query: {
                     bool: {
                         must: [
@@ -148,6 +151,7 @@ exports.list_search = function (req, res) {
             index: 'blocks',
 
             body: {
+                _source: ["id", "timestamp", "transactions", "miner"],
                 query: {
                     bool: {
                         must: [
@@ -215,6 +219,7 @@ exports.list_paging_next = function (req, res) {
         index: 'blocks',
 
         body: {
+            _source: ["id", "timestamp", "transactions", "miner"],
             query: {
 
                 bool: {
@@ -274,6 +279,7 @@ exports.list_paging_previous = function (req, res) {
         index: 'blocks',
 
         body: {
+            _source: ["id", "timestamp", "transactions", "miner"],
             query: {
 
                 bool: {
@@ -321,6 +327,7 @@ exports.list_search_next = function (req, res) {
         index: 'blocks',
 
         body: {
+            _source: ["id", "timestamp", "transactions", "miner"],
             query: {
                 bool: {
                     must: [
@@ -373,6 +380,7 @@ exports.list_search_previous = function (req, res) {
         index: 'blocks',
 
         body: {
+            _source: ["id", "timestamp", "transactions", "miner"],
             query: {
                 bool: {
                     must: [

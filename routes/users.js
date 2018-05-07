@@ -68,19 +68,36 @@ exports.list = function (req, res) {
  */
 exports.list_one = function (req, res) {
 
-    var id = "\'" + req.params.id + "\'";
-    console.log('users: viewing one');
 
-    client.execute("SELECT * from users WHERE zaddress = " + id + " ALLOW FILTERING", [], function (err, result) {
-        if (err) {
-            console.log('users: viewing one err:', err);
-            res.status(404).send({msg: err});
-        } else {
-            console.log('users: viewing one succ:');
-            res.render('userViewOne', {page_title: "Users Details", data: result.rows});
+    var id = req.params.id;
+    client_elasticsearch.search({
+        index: 'users',
+
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {zaddress:id}
+                        }
+                    ]
+                }
+            }
         }
-    });
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
 
+
+        res.render('userViewOne', {page_title: " Users Detail", data: result })
+
+    }, function (err) {
+        console.trace(err.message);
+    });
 };
 
 

@@ -61,17 +61,35 @@ exports.list = function (req, res) {
  */
 exports.list_one = function (req, res) {
 
-    var id = req.params.id;
-    console.log('trans: viewing one');
 
-    client.execute("SELECT id,bank,promize_amount,promize_bank,from_account,to_account,type,from_zaddress,to_zaddress,timestamp from trans WHERE id = " + id + " ALLOW FILTERING", [], function (err, result) {
-        if (err) {
-            console.log('trans: viewing one err:', err);
-            res.status(404).send({msg: err});
-        } else {
-            console.log('processing Transaction View One: viewing one succ:');
-            res.render('processingTransactionViewOne', {page_title: "Processing Transactions Details", data: result.rows});
+    var id = req.params.id;
+    client_elasticsearch.search({
+        index: 'trans',
+
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {id:id}
+                        }
+                    ]
+                }
+            }
         }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
+
+
+        res.render('processingTransactionViewOne', {page_title: " processingTransactionViewOne", data: result })
+
+    }, function (err) {
+        console.trace(err.message);
     });
 
 };

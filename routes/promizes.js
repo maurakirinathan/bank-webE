@@ -189,18 +189,34 @@ exports.list = function (req, res) {
 exports.list_one = function (req, res) {
 
     var id = req.params.id;
-    console.log('promizes: viewing one');
+    client_elasticsearch.search({
+        index: 'promizes',
 
-    client.execute("SELECT id,bank,amount,origin_zaddress from promizes WHERE id = " + id + " ALLOW FILTERING", [], function (err, result) {
-        if (err) {
-            console.log('promizes: viewing one err:', err);
-            res.status(404).send({msg: err});
-        } else {
-            console.log('promizes: viewing one succ:');
-            res.render('promizesViewOne', {page_title: "Promizes Details", data: result.rows});
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {id:id}
+                        }
+                    ]
+                }
+            }
         }
-    });
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
 
+
+        res.render('promizesViewOne', {page_title: " promizesViewOne", data: result })
+
+    }, function (err) {
+        console.trace(err.message);
+    });
 };
 
 
@@ -271,7 +287,7 @@ exports.list_search = function (req, res) {
 
 exports.transactions_for_promize = function (req, res) {
 
-    var id = req.params.id;
+/*    var id = req.params.id;
     client.execute("select id,bank,promize_amount,from_account,to_account,timestamp from transactions where promize_id=" + id + " ALLOW FILTERING", [], function (err, result) {
         if (err) {
             console.log('alltransaction_promize: list err:', err);
@@ -280,6 +296,38 @@ exports.transactions_for_promize = function (req, res) {
             console.log('alltransaction_promize: list succ:', result.rows);
             res.render('alltransaction_promize', {page_title: "All Transactions", data: result.rows})
         }
+    });*/
+
+
+    var id = req.params.id;
+    client_elasticsearch.search({
+        index: 'transactions',
+
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {promize_id:id}
+                        }
+                    ]
+                }
+            }
+        }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
+
+
+        res.render('alltransaction_promize', {page_title: " alltransaction_promize", data: result })
+
+    }, function (err) {
+        console.log('alltransaction_promize: list err:', err);
+        res.status(404).send({msg: err});
     });
 
 };

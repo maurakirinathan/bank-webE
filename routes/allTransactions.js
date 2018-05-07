@@ -9,16 +9,33 @@ var JSONObj_search = new Object();
 exports.list_one = function (req, res) {
 
     var id = req.params.id;
-    console.log('trans: viewing one');
+    client_elasticsearch.search({
+        index: 'transactions',
 
-    client.execute("SELECT id,bank,promize_amount,promize_bank,from_account,to_account,type,from_zaddress,to_zaddress,timestamp from transactions WHERE id = " + id + " ALLOW FILTERING", [], function (err, result) {
-        if (err) {
-            console.log('trans: viewing one err:', err);
-            res.status(404).send({msg: err});
-        } else {
-            console.log('trans: viewing one succ:');
-            res.render('transactionViewOne', {page_title: "Transactions Details", data: result.rows});
+        body: {
+            query: {
+
+                bool: {
+                    must: [
+                        {
+                            term: {id:id}
+                        }
+                    ]
+                }
+            }
         }
+    }).then(function (resp) {
+        var result = [];
+        for (var i = 0; i < resp.hits.hits.length; i++) {
+            result.push(resp.hits.hits[i]._source);
+        }
+        console.log(resp.hits.hits);
+
+
+        res.render('transactionViewOne', {page_title: " transactionViewOne", data: result })
+
+    }, function (err) {
+        console.trace(err.message);
     });
 
 };
